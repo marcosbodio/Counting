@@ -33,7 +33,7 @@ object Counting {
     else count(persons, 1, step)
 
   @tailrec
-  def count(persons: List[Person], startIndex: Int, step: Int): Option[Int] =
+  private def count(persons: List[Person], startIndex: Int, step: Int): Option[Int] =
     persons.size match {
       case 0 => None
       case 1 => Some(persons.head.position)
@@ -46,7 +46,7 @@ object Counting {
         count(survivors, nextStartIndex, step)
     }
 
-  def assignModularIndex(persons: List[Person], startIndex: Int, step: Int): List[(Person, Int)] = {
+  private def assignModularIndex(persons: List[Person], startIndex: Int, step: Int): List[(Person, Int)] = {
 
     @tailrec
     def assign(ps: List[Person], si: Int, result: List[(Person, Int)]): List[(Person, Int)] =
@@ -56,24 +56,6 @@ object Counting {
         assign(ps.tail, (si + 1) % step, (ps.head, si) :: result)
 
     assign(persons, startIndex, List.empty)
-  }
-
-  def loop(start: Int, end: Int, step: Int): Unit = {
-    (start to end) foreach (i => {
-      val persons = (1 to i).toList.map(Person(_))
-      println(s"""$i : ${count(persons, 1, step)}""")
-    })
-  }
-
-  def loop(start: Int, end: Int): Unit = {
-    (start to end) foreach (i => {
-      val persons = (1 to i).toList.map(Person(_))
-      println(s"""$i : ${count(persons, 1, i)}""")
-    })
-  }
-
-  def main(args: Array[String]) {
-    loop(2, 100)
   }
 
 }
