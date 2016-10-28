@@ -32,6 +32,15 @@ object Counting {
     (2 to n).foldLeft(0) { case (previousResult, currentSize) => (k + previousResult) % currentSize }
   }
 
+  // if we want handle Long values
+  def findPlaceOfLastPerson(n: Long, k: Long): Long = {
+    require(n > 0, "number of people in the circle (n) must be larger than 0")
+    require(k > 0, "step rate (k) must be larger than 0")
+    Iterator.iterate(2L)(_ + 1).takeWhile(_ < n).foldLeft(0L) {
+      case (previousResult, currentSize) => (k + previousResult) % currentSize
+    }
+  }
+
   def main(args: Array[String]) {
     require(args.length == 2, "usage: Counting <number of people in the circle (n)> <step rate (k)>")
 
