@@ -1,4 +1,4 @@
-import scala.annotation.tailrec
+
 
 object Counting {
 
@@ -26,24 +26,28 @@ object Counting {
   Choose a couple of other cases to test
    */
 
-  def findPlaceOfLastPerson(n: Int, k: Int): Int =
-    n match {
-      case 1 => 0
-      case _ => (k + findPlaceOfLastPerson(n - 1, k)) % n
-    }
+  def findPlaceOfLastPerson(n: Int, k: Int): Int = {
+    require(n > 0, "number of people in the circle (n) must be larger than 0")
+    require(k > 0, "step rate (k) must be larger than 0")
+    (2 to n).foldLeft(0) { case (previousResult, currentSize) => (k + previousResult) % currentSize }
+  }
 
   def main(args: Array[String]) {
     require(args.length == 2, "usage: Counting <number of people in the circle (n)> <step rate (k)>")
 
-    val n = util.Try(args(0).toInt).getOrElse(-1)
-    val k = util.Try(args(1).toInt).getOrElse(-1)
+    val n = util.Try(args(0).toInt).toOption
+    val k = util.Try(args(1).toInt).toOption
 
-    require(n > 0, "number of people in the circle (n) must be larger than 0")
-    require(k > 0, "step rate (k) must be larger than 0")
+    if (n.isEmpty)
+      println(s"""${args(0)} is not a valid Int""")
+    else if (k.isEmpty)
+      println(s"""${args(1)} is not a valid Int""")
+    else {
+      val placeOfLastPerson = findPlaceOfLastPerson(n.get, k.get)
 
-    val placeOfLastPerson = findPlaceOfLastPerson(n, k)
+      println(s"""you need to stand at place $placeOfLastPerson in the circle to be the last person left""")
+    }
 
-    println(s"""you need to stand at place $placeOfLastPerson in the circle to be the last person left""")
   }
 
 }
