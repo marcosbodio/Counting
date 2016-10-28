@@ -28,12 +28,12 @@ object Counting {
 
   case class Person(position: Int)
 
-  def count(persons: List[Person], step: Int): Option[Int] =
+  def findPlaceOfLastPerson(persons: List[Person], step: Int): Option[Int] =
     if (step <= 0) None
-    else count(persons, 1, step)
+    else findPlaceOfLastPerson(persons, 1, step)
 
   @tailrec
-  private def count(persons: List[Person], startIndex: Int, step: Int): Option[Int] =
+  private def findPlaceOfLastPerson(persons: List[Person], startIndex: Int, step: Int): Option[Int] =
     persons.size match {
       case 0 => None
       case 1 => Some(persons.head.position)
@@ -43,7 +43,7 @@ object Counting {
         val survivors = personsWithModularIndexes.filterNot {
           case (person, modularIndex) => modularIndex == 0
         }.unzip._1
-        count(survivors, nextStartIndex, step)
+        findPlaceOfLastPerson(survivors, nextStartIndex, step)
     }
 
   private def assignModularIndex(persons: List[Person], startIndex: Int, step: Int): List[(Person, Int)] = {
@@ -56,6 +56,21 @@ object Counting {
         assign(ps.tail, (si + 1) % step, (ps.head, si) :: result)
 
     assign(persons, startIndex, List.empty)
+  }
+
+  def main(args: Array[String]) {
+    require(args.length == 2, "usage: Counting <number of people in the circle (n)> <step rate (k)>")
+
+    val n = util.Try(args(0).toInt).getOrElse(-1)
+    val k = util.Try(args(1).toInt).getOrElse(-1)
+
+    require(n > 0, "number of people in the circle (n) must be larger than 0")
+    require(k > 0, "step rate (k) must be larger than 0")
+
+    val persons = (0 until n).toList.map(Person(_))
+    val placeOfLastPerson = findPlaceOfLastPerson(persons, n, k)
+
+    println(s"""you need to stand at place $placeOfLastPerson in the circle to be the last person left""")
   }
 
 }

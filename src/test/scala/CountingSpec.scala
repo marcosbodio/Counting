@@ -15,18 +15,18 @@ class CountingSpec extends Specification {
   return Some(1 + 2*(n - 2^(floor(log2(n)))) when k = 2   $e5
       """
 
-  def e1 = Counting.count(List.empty, 0) mustEqual None
+  def e1 = Counting.findPlaceOfLastPerson(List.empty, 0) mustEqual None
 
-  def e2 = Counting.count(List.empty, -1) mustEqual None
+  def e2 = Counting.findPlaceOfLastPerson(List.empty, -1) mustEqual None
 
-  def e3 = Counting.count(persons(3), 2) mustEqual Some(3)
+  def e3 = Counting.findPlaceOfLastPerson(persons(3), 2) mustEqual Some(3)
 
-  def e4 = Counting.count(persons(1024 * 1024), 2) mustEqual Some(1)
+  def e4 = Counting.findPlaceOfLastPerson(persons(1024 * 1024), 2) mustEqual Some(1)
 
   def e5 = {
     val n = 1234567
     val expected = 1 + 2 * (n - Math.pow(2, Math.floor(Math.log(n) / Math.log(2))))
-    Counting.count(persons(n), 2) mustEqual Some(expected)
+    Counting.findPlaceOfLastPerson(persons(n), 2) mustEqual Some(expected)
   }
 
   def persons(size: Int): List[Person] =
